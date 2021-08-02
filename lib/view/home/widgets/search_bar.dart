@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_location_search/cubit/home/home_cubit.dart';
+import 'package:weather_location_search/model/weather_model.dart';
 import 'package:weather_location_search/view/seach_result/seach_result.dart';
 
 class SearchBar extends StatelessWidget {
@@ -22,7 +23,7 @@ class SearchBar extends StatelessWidget {
                   if (value.toString().isEmpty) {
                     return 'enter city please,';
                   }
-                  else if (value.toString().length == 2) {
+                  else if (value.toString().length < 2) {
                     return 'Minumam letters 3';
                   }
                 },
@@ -31,8 +32,8 @@ class SearchBar extends StatelessWidget {
                   print('conrtller ====> ${cubit.searchController.text}');
                 },
                 decoration: InputDecoration(
-                  hintText: 'enter city name .. ',
-                  labelText: 'city',
+                  hintText: 'cairo',
+                  labelText: 'Enter city name',
                   labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -43,7 +44,7 @@ class SearchBar extends StatelessWidget {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),
                       borderSide:
-                          BorderSide(color: Colors.red, width: 2)),
+                          BorderSide(color: Colors.blueAccent, width: 2)),
                   disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),
                       borderSide:
