@@ -22,9 +22,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (BuildContext context) => HomeCubit()..getWeatherByLocation()
-           
-            ),
+            create: (BuildContext context) => HomeCubit()
+              ..getLocationPermission()
+           ),
       ],
       child: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) {},

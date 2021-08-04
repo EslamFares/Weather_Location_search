@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_location_search/model/weather_model.dart';
 import 'package:weather_location_search/shared/dio_helper.dart';
 import 'home_state.dart';
@@ -16,10 +17,14 @@ class HomeCubit extends Cubit<HomeStates> {
 
   bool loading = true;
   bool loadingLocation = true;
-  bool noData = false;
+  bool noData = true;
   bool noDataLocation = false;
   late WeatherModel searchWeatherModel;
   late WeatherModel locationWeatherModel;
+  clearSearch() {
+    loading = true;
+    emit(HomeChangeLoadingState());
+  }
 
   String myID = '2db8334a16a6a509e314680779471b9b';
   void getWeather() async {
@@ -28,6 +33,7 @@ class HomeCubit extends Cubit<HomeStates> {
       value = await DioHelper.getData(url: 'data/2.5/weather?', query: {
         'appid': myID,
         'q': searchController.text,
+        'units':'imperial'
       });
     } catch (e) {
       print('errrrrrrrrror catch ==>$e');
@@ -37,11 +43,11 @@ class HomeCubit extends Cubit<HomeStates> {
       print("city found");
       searchWeatherModel = WeatherModel.fromJson(value.data);
       emit(HomeChangeSearchWeatherState());
-      print(' Data =====>${searchWeatherModel.name}');
-      loading = false;
-      emit(HomeChangeLoadingState());
       noData = false;
       emit(HomeChangeNODataState());
+      loading = false;
+      emit(HomeChangeLoadingState());
+      print(' Data =====>${searchWeatherModel.name}');
     } else {
       print("city not found");
       loading = false;
@@ -52,23 +58,19 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
 //=====================================
-  Future<void> getLocation() async {
+
+  void getWeatherByLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     print(position);
-  }
 
-  void getWeatherByLocation() async {
-     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(position);
-    
     Response<dynamic>? value;
     try {
       value = await DioHelper.getData(url: 'data/2.5/weather?', query: {
         'lat': position.latitude,
         'lon': position.longitude,
         'appid': myID,
+        'units':'imperial'
       });
     } catch (e) {
       print('errrrrrrrrror catch ==>$e');
@@ -85,10 +87,34 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeChangeNODataLocationState());
     } else {
       print("city not found");
-      loading = false;
+      loadingLocation = false;
       emit(HomeChangeLoadingLocationState());
       noDataLocation = true;
       emit(HomeChangeNODataLocationState());
+    }
+  }
+
+  //======================
+  bool locationReqDeny = false;
+  bool getLocationSettinng = false;
+  getLocationPermission() async {
+    PermissionStatus permission = await Permission.locationWhenInUse.request();
+    if (permission.isDenied) {
+      print('location isDenied..❌❌❌..');
+      locationReqDeny = true;
+      emit(HomeChangeLocationReqState());
+    }
+    if (permission.isGranted) {
+      print('location Granted..✔️✔️✔️..');
+      getWeatherByLocation();
+      locationReqDeny = false;
+      emit(HomeChangeLocationReqState());
+    }
+    if (permission.isPermanentlyDenied) {
+      print('location isPermanentlyDenied ..❗❗❗..');
+      openAppSettings();
+      getLocationSettinng = true;
+      emit(HomeChangeGetLocationSettinngState());
     }
   }
 }

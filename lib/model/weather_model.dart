@@ -79,12 +79,12 @@ class Weather {
 }
 
 class Main {
-  double? temp;
+  String? temp;
   String? feelsLike;
-  double? tempMin;
-  double? tempMax;
-  int? pressure;
-  int? humidity;
+  String? tempMin;
+  String? tempMax;
+  String? pressure;
+  String? humidity;
 
   Main(
       {this.temp,
@@ -95,51 +95,51 @@ class Main {
       this.humidity});
 
   Main.fromJson(Map<String, dynamic> json) {
-    temp = json['temp'];
+    temp = json['temp'].toString();
     feelsLike = json['feels_like'].toString();
-    tempMin = json['temp_min'];
-    tempMax = json['temp_max'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
+    tempMin = json['temp_min'].toString();
+    tempMax = json['temp_max'].toString();
+    pressure = json['pressure'].toString();
+    humidity = json['humidity'].toString();
   }
 }
 
 class Wind {
-  double? speed;
-  int? deg;
+  String? speed;
+  String? deg;
 
   Wind({this.speed, this.deg});
 
   Wind.fromJson(Map<String, dynamic> json) {
-    speed = json['speed'];
-    deg = json['deg'];
+    speed = json['speed'].toString();
+    deg = json['deg'].toString();
   }
 }
 
 class Clouds {
-  int? all;
+  String? all;
 
   Clouds({this.all});
 
   Clouds.fromJson(Map<String, dynamic> json) {
-    all = json['all'];
+    all = json['all'].toString();
   }
 }
 
 class Sys {
-  int? type;
-  int? id;
+  String? type;
+  String? id;
   String? country;
-  int? sunrise;
-  int? sunset;
+  String? sunrise;
+  String? sunset;
 
   Sys({this.type, this.id, this.country, this.sunrise, this.sunset});
 
   Sys.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    id = json['id'];
-    country = json['country'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
+    type = json['type'].toString();
+    id = json['id'].toString();
+    country = json['country'].toString();
+    sunrise = json['sunrise'].toString();
+    sunset = json['sunset'].toString();
   }
 }

@@ -9,6 +9,13 @@ class SearchReasult extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Search Result'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+            cubit.clearSearch();
+          },
+        ),
       ),
       body: cubit.loading
           ? Center(child: CircularProgressIndicator())
