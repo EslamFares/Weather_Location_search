@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeStates> {
   bool noData = true;
   bool noDataLocation = false;
   late WeatherModel searchWeatherModel;
-  late WeatherModel locationWeatherModel;
+   WeatherModel? locationWeatherModel;
   clearSearch() {
     loading = true;
     emit(HomeChangeLoadingState());
@@ -33,7 +33,7 @@ class HomeCubit extends Cubit<HomeStates> {
       value = await DioHelper.getData(url: 'data/2.5/weather?', query: {
         'appid': myID,
         'q': searchController.text,
-        'units':'imperial'
+        'units': 'imperial'
       });
     } catch (e) {
       print('errrrrrrrrror catch ==>$e');
@@ -70,7 +70,7 @@ class HomeCubit extends Cubit<HomeStates> {
         'lat': position.latitude,
         'lon': position.longitude,
         'appid': myID,
-        'units':'imperial'
+        'units': 'imperial'
       });
     } catch (e) {
       print('errrrrrrrrror catch ==>$e');
@@ -80,7 +80,7 @@ class HomeCubit extends Cubit<HomeStates> {
       print("city found");
       locationWeatherModel = WeatherModel.fromJson(value.data);
       emit(HomeChangeLocationWeatherState());
-      print(' Data =====>${locationWeatherModel.name}');
+      print(' Data =====>${locationWeatherModel?.name}');
       loadingLocation = false;
       emit(HomeChangeLoadingLocationState());
       noDataLocation = false;
@@ -96,9 +96,9 @@ class HomeCubit extends Cubit<HomeStates> {
 
   //======================
   bool locationReqDeny = false;
-  bool getLocationSettinng = false;
+  late PermissionStatus permission;
   getLocationPermission() async {
-    PermissionStatus permission = await Permission.locationWhenInUse.request();
+    permission = await Permission.locationWhenInUse.request();
     if (permission.isDenied) {
       print('location isDenied..❌❌❌..');
       locationReqDeny = true;
@@ -110,11 +110,43 @@ class HomeCubit extends Cubit<HomeStates> {
       locationReqDeny = false;
       emit(HomeChangeLocationReqState());
     }
-    if (permission.isPermanentlyDenied) {
-      print('location isPermanentlyDenied ..❗❗❗..');
-      openAppSettings();
-      getLocationSettinng = true;
-      emit(HomeChangeGetLocationSettinngState());
+    if (!permission.isGranted) {
+      print('location Granted..❌✔️..');
+      locationReqDeny = true;
+      emit(HomeChangeLocationReqState());
     }
+    // if (permission.isPermanentlyDenied) {
+    //   print('location isPermanentlyDenied ..❗❗❗..');
+    //   locationReqDeny = true;
+    //   emit(HomeChangeLocationReqState());
+    //   // openAppSettings();
+    //   // getLocationSettinng = true;
+    //   // emit(HomeChangeGetLocationSettinngState());
+    // }
+  }
+
+  getDataAfterSetting() async {
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      print('location Granted..✔️✔️✔️..');
+      getWeatherByLocation();
+      locationReqDeny = false;
+      emit(HomeChangeLocationReqState());
+    }
+    if (!status.isGranted) {
+      print('location Granted..❌✔️..');
+      openAppSettings();
+      locationReqDeny = true;
+      emit(HomeChangeLocationReqState());
+    }
+    // if (permission.isPermanentlyDenied) {
+    //   print('location isPermanentlyDenied ..❗❗❗..');
+    //   locationReqDeny = true;
+    //   emit(HomeChangeLocationReqState());
+    //   // openAppSettings();
+    //   // getLocationSettinng = true;
+    //   // emit(HomeChangeGetLocationSettinngState());
+    // }
   }
 }
