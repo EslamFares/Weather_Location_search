@@ -62,7 +62,10 @@ class HomeView extends StatelessWidget {
         return Center(child: CircularProgressIndicator());
       } else if (cubit.loadingLocation == false) {
         return BodyData(cubit.locationWeatherModel);
+      } else if (cubit.noDataLocation == true) {
+        return Center(child: Text('city location not found'));
       }
+      
     } else if (cubit.gpsOpen == false) {
       return OpenGPS();
     } else {
@@ -77,7 +80,7 @@ class OpenGPS extends StatelessWidget {
     HomeCubit cubit = HomeCubit.get(context);
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('open gps'),
         ElevatedButton(
