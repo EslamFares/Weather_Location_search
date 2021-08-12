@@ -15,3 +15,4 @@ class HomeChangeNODataState extends HomeStates {}
 class HomeChangeNODataLocationState extends HomeStates {}
 
 class HomeChangeLocationReqState extends HomeStates {}
+class GPSopenState extends HomeStates {}

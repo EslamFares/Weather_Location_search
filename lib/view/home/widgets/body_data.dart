@@ -4,12 +4,12 @@ import 'data_item.dart';
 import 'text_container_color.dart';
 
 class BodyData extends StatelessWidget {
-  final WeatherModel weatherModel;
+  final WeatherModel? weatherModel;
   const BodyData(this.weatherModel);
   @override
   Widget build(BuildContext context) {
     int temp =
-        ((double.parse(weatherModel.main!.temp.toString()) - 32) * (5 / 9))
+        ((double.parse(weatherModel!.main!.temp.toString()) - 32) * (5 / 9))
             .round();
     double w = MediaQuery.of(context).size.width;
     return ListView(
@@ -20,7 +20,7 @@ class BodyData extends StatelessWidget {
           children: [
             TextContainerColor('City'),
             TextContainerColor(
-              weatherModel.name.toString(),
+              weatherModel!.name.toString(),
               width: w * .5,
             ),
           ],
@@ -34,11 +34,11 @@ class BodyData extends StatelessWidget {
             DataItem(title: 'temp', data: temp.toString() + '°C'),
             DataItem(
               title: 'pressure',
-              data: weatherModel.main!.pressure.toString(),
+              data: weatherModel!.main!.pressure.toString(),
             ),
             DataItem(
               title: 'humidity',
-              data: weatherModel.main!.humidity.toString(),
+              data: weatherModel!.main!.humidity.toString(),
             ),
           ],
         ),
@@ -47,11 +47,11 @@ class BodyData extends StatelessWidget {
             TextContainerColor('wind'),
             DataItem(
               title: 'speed',
-              data: weatherModel.wind!.speed.toString(),
+              data: weatherModel!.wind!.speed.toString(),
             ),
             DataItem(
               title: 'deg',
-              data: weatherModel.wind!.deg.toString(),
+              data: weatherModel!.wind!.deg.toString(),
             ),
           ],
         ),
@@ -59,7 +59,7 @@ class BodyData extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TextContainerColor('Country'),
-            TextContainerColor(weatherModel.sys!.country.toString()),
+            TextContainerColor(weatherModel!.sys!.country.toString()),
           ],
         ),
         Column(
@@ -67,7 +67,7 @@ class BodyData extends StatelessWidget {
             TextContainerColor('weather'),
             DataItem(
               title: 'main',
-              data: weatherModel.weather![0].main.toString(),
+              data: weatherModel!.weather![0].main.toString(),
             ),
           ],
         ),

@@ -57,14 +57,35 @@ class HomeView extends StatelessWidget {
     HomeCubit cubit = HomeCubit.get(context);
     if (cubit.locationReqDeny) {
       return LocationDenyRequestAgain();
-    } else if (cubit.loadingLocation) {
-      return Center(child: CircularProgressIndicator());
-    } else if (cubit.loadingLocation == false) {
-      return BodyData(cubit.locationWeatherModel!);
+    } else if (cubit.gpsOpen) {
+      if (cubit.loadingLocation) {
+        return Center(child: CircularProgressIndicator());
+      } else if (cubit.loadingLocation == false) {
+        return BodyData(cubit.locationWeatherModel);
+      }
+    } else if (cubit.gpsOpen == false) {
+      return OpenGPS();
     } else {
       return Text('open setting and give app location permission ..');
     }
   }
 }
 
-
+class OpenGPS extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    HomeCubit cubit = HomeCubit.get(context);
+    return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('open gps'),
+        ElevatedButton(
+            onPressed: () {
+              cubit.checkGpsOpen();
+            },
+            child: Text('Refresh After open Gps'))
+      ],
+    ));
+  }
+}

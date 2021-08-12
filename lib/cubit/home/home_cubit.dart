@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeStates> {
   bool noData = true;
   bool noDataLocation = false;
   late WeatherModel searchWeatherModel;
-   WeatherModel? locationWeatherModel;
+  WeatherModel? locationWeatherModel;
   clearSearch() {
     loading = true;
     emit(HomeChangeLoadingState());
@@ -58,7 +58,24 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
 //=====================================
+  bool gpsOpen = true;
+  checkGpsOpen() async {
+    bool locationOpen = await Geolocator.isLocationServiceEnabled();
+    if (locationOpen) {
+        print('GPS open');
+      gpsOpen = true;
+      emit(GPSopenState());
+      getWeatherByLocation();
+    } else {
+      print('GPS not open');
+      gpsOpen = false;
+      emit(GPSopenState());
+      //    loadingLocation = false;
+      // emit(HomeChangeLoadingLocationState());
 
+    }
+  }
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>
   void getWeatherByLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -106,7 +123,8 @@ class HomeCubit extends Cubit<HomeStates> {
     }
     if (permission.isGranted) {
       print('location Granted..✔️✔️✔️..');
-      getWeatherByLocation();
+      // getWeatherByLocation();
+      checkGpsOpen();
       locationReqDeny = false;
       emit(HomeChangeLocationReqState());
     }
@@ -131,6 +149,7 @@ class HomeCubit extends Cubit<HomeStates> {
     if (status.isGranted) {
       print('location Granted..✔️✔️✔️..');
       getWeatherByLocation();
+
       locationReqDeny = false;
       emit(HomeChangeLocationReqState());
     }
