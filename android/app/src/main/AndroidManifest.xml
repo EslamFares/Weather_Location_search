@@ -5,6 +5,8 @@
    <application
         android:label="weather_location_search"
         android:icon="@mipmap/launcher_icon">
+    <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyARgGlrmy8fE7b6gPGsWBu4I-aqMV0i8Do"/>        
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

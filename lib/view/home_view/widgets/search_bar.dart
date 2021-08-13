@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_location_search/cubit/home/home_cubit.dart';
+import 'package:weather_location_search/cubit/home_bloc/home_cubit.dart';
 import 'package:weather_location_search/view/seach_result/seach_result.dart';
 
 class SearchBar extends StatelessWidget {

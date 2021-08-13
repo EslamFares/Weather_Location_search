@@ -62,7 +62,7 @@ class HomeCubit extends Cubit<HomeStates> {
   checkGpsOpen() async {
     bool locationOpen = await Geolocator.isLocationServiceEnabled();
     if (locationOpen) {
-        print('GPS open');
+      print('GPS open');
       gpsOpen = true;
       emit(GPSopenState());
       getWeatherByLocation();
@@ -75,12 +75,13 @@ class HomeCubit extends Cubit<HomeStates> {
 
     }
   }
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>
+
   void getWeatherByLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     print(position);
-
     Response<dynamic>? value;
     try {
       value = await DioHelper.getData(url: 'data/2.5/weather?', query: {
@@ -167,5 +168,53 @@ class HomeCubit extends Cubit<HomeStates> {
     //   // getLocationSettinng = true;
     //   // emit(HomeChangeGetLocationSettinngState());
     // }
+  }
+
+//=============================================================================
+  bool maploadingLocation = false;
+  bool mapNoData = true;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  getPosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position);
+    return position;
+  }
+
+  WeatherModel? mapWeatherModel;
+  Future<void> getWeatherMap(String lat, String lon) async {
+      maploadingLocation = true;
+      emit(MaploadingLocationState());
+    Response<dynamic>? value;
+    try {
+      value = await DioHelper.getData(
+          url: 'data/2.5/weather?',
+          query: {'lat': lat, 'lon': lon, 'appid': myID, 'units': 'imperial'});
+    } catch (e) {
+      print('errrrrrrrrror catch ==>$e');
+    }
+
+    if (value != null) {
+      print("city found");
+      mapWeatherModel = WeatherModel.fromJson(value.data);
+      emit(MapWeatherState());
+      print(' Data =====>${mapWeatherModel?.name}');
+      maploadingLocation = false;
+      emit(MaploadingLocationState());
+      mapNoData = false;
+      emit(MapNoDatanState());
+    } else {
+      print("city not found");
+      maploadingLocation = false;
+      emit(MaploadingLocationState());
+      mapNoData = true;
+      emit(MapNoDatanState());
+    }
+  }
+
+  clearmap() {
+    maploadingLocation = true;
+    emit(HomeChangeLoadingState());
   }
 }

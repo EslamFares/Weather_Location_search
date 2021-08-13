@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_location_search/cubit/home/home_cubit.dart';
-import 'package:weather_location_search/view/home/widgets/body_data.dart';
-import 'package:weather_location_search/view/home/widgets/search_bar.dart';
-
+import 'package:weather_location_search/cubit/home_bloc/home_cubit.dart';
+import 'package:weather_location_search/view/home_view/widgets/body_data.dart';
+import 'package:weather_location_search/view/home_view/widgets/search_bar.dart';
 import 'widgets/backimg.dart';
 import 'widgets/location_deny_request_again.dart';
 

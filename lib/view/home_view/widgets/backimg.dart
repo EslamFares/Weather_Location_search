@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_location_search/cubit/home/home_cubit.dart';
+import 'package:weather_location_search/cubit/home_bloc/home_cubit.dart';
 
 class BackImg extends StatelessWidget {
   @override
