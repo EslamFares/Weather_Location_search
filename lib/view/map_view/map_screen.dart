@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weather_location_search/cubit/home_bloc/home_cubit.dart';
-import 'package:weather_location_search/view/home_view/widgets/body_data.dart';
+import 'package:weather_location_search/view/map_view/widgets/bottomsheet_child.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -97,30 +97,8 @@ class _MapScreenState extends State<MapScreen> {
                                   '${markers.first.position.latitude}',
                                   '${markers.first.position.longitude}')
                               .then((value) => cubit.scaffoldKey.currentState!
-                                  .showBottomSheet((context) => Container(
-                                        height: h * .5,
-                                        child: cubit.maploadingLocation
-                                            ? Center(
-                                                child:
-                                                    CircularProgressIndicator())
-                                            : Column(
-                                                children: [
-                                                  Container(
-                                                    height: 30,
-                                                    child: IconButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        icon: Icon(Icons
-                                                            .arrow_back_ios)),
-                                                  ),
-                                                  Expanded(
-                                                      child: BodyData(cubit
-                                                          .mapWeatherModel)),
-                                                ],
-                                              ),
-                                      )));
+                                  .showBottomSheet(
+                                      (context) => BottomSheetChild()));
                         },
                         child: Text('ok'))
               ],
